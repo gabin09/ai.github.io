@@ -28,9 +28,25 @@ const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 
 const responses = {
-    '안녕': '안녕하세요!',
-    '반가워': '반가워요!',
-    '오늘 날씨는 어때?': '오늘은 맑은 날씨입니다.',
+    '안녕': 'ㅎㅇ',
+    '반가워': 'ㅎㅇㅎㅇ',
+    '오늘 날씨는 어때?': '손가락없냐 검색좀해라',
+    '니엄마': '뭐',
+    '넌 누구니?': '전 위대하신 가빈님이 만드신 ai로봇입니다.'
+    'ㄴㄱ?': '전 위대하신 가빈님이 만드신 ai로봇입니다.'
+    '누구니?': '전 위대하신 가빈님이 만드신 ai로봇입니다.'
+    '넌 누구': '전 위대하신 가빈님이 만드신 ai로봇입니다.'
+    '자소': '전 위대하신 가빈님이 만드신 ai로봇입니다.'
+    '자기소개': '전 위대하신 가빈님이 만드신 ai로봇입니다.'
+    '너 엄마 없지': '자기소개 감사합니다.'
+    '니아빠': '뭐'
+    '너 아빠 없지': '자기소개 감사합니다.'
+    '자기소개 아닌데': '거짓말 하실 필요 없습니다.'
+    '권찬': 'ㅂㅅ'
+    'ㄴㄱㅁ': 'ㄴㄱㅁ는 니엄마라는 뜻입니다.'
+    'ㄴㅇㅃ': 'ㄴㅇㅃ는 니 아빠라는 뜻입니다.'
+    '너 취미': '로봇인데 있겠냐?'
+    
 };
 
 function evaluateExpression() {
@@ -50,7 +66,7 @@ function sendUserMessage() {
     displayMessage('User', message);
     userInput.value = '';
 
-    let answer = '아직 배우지 못하였습니다.';
+    let answer = '아직 완전판아니라 그런거 몰?루';
     for (const question in responses) {
         if (message.includes(question)) {
             answer = responses[question];
