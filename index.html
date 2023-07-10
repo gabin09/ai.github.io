@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Chat</title>
+</head>
+<body>
+    <h1>AI Chat</h1>
+    <div id="chat-container"></div>
+    <input type="text" id="user-input" placeholder="질문을 입력하세요..." />
+    <button onclick="sendUserMessage()">전송</button>
+
+    <script>
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+
+    const responses = {
+        '안녕': '안녕하세요!',
+        '반가워': '반가워요!',
+        '오늘 날씨는 어때?': '오늘은 맑은 날씨입니다.',
+    };
+
+    function sendUserMessage() {
+        const message = userInput.value;
+        displayMessage('User', message);
+        userInput.value = '';
+
+        let answer = '아직 배우지 못하였습니다.';
+        for (const question in responses) {
+            if (message.includes(question)) {
+                answer = responses[question];
+                break;
+            }
+        }
+        displayMessage('AI', answer);
+    }
+
+    function displayMessage(sender, content) {
+        const messageElement = document.createElement('p');
+        messageElement.innerHTML = `<strong>${sender}: </strong>${content}`;
+        chatContainer.appendChild(messageElement);
+    }
+    </script>
+</body>
+</html>
