@@ -5,71 +5,66 @@
 </head>
 <body>
     <h1>Math Problem Solver and AI Chat</h1>
+<h2>Math Problem Solver</h2>
+<div id="problem-container"></div>
+<input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
+<button onclick="evaluateExpression()">평가</button>
 
-    <h2>Math Problem Solver</h2>
-    <div id="problem-container"></div>
-    <input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
-    <button onclick="evaluateExpression()">평가</button>
+<div id="result-container"></div>
 
-    <div id="result-container"></div>
+<hr>
 
-    <hr>
+<h2>AI Chat</h2>
+<div id="chat-container"></div>
+<input type="text" id="user-input" placeholder="질문을 입력하세요..." />
+<button onclick="sendUserMessage()">전송</button>
 
-    <h2>AI Chat</h2>
-    <div id="chat-container"></div>
-    <input type="text" id="user-input" placeholder="질문을 입력하세요..." />
-    <button onclick="sendUserMessage()">전송</button>
+<script>
+const problemContainer = document.getElementById('problem-container');
+const userExpression = document.getElementById('user-expression');
+const resultContainer = document.getElementById('result-container');
 
-    <script>
-    const problemContainer = document.getElementById('problem-container');
-    const userExpression = document.getElementById('user-expression');
-    const resultContainer = document.getElementById('result-container');
+const chatContainer = document.getElementById('chat-container');
+const userInput = document.getElementById('user-input');
 
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
+const responses = {
+    '안녕': '안녕하세요!',
+    '반가워': '반가워요!',
+    '오늘 날씨는 어때?': '오늘은 맑은 날씨입니다.',
+};
 
-    const responses = {
-        '안녕': '안녕하세요!',
-        '반가워': '반가워요!',
-        '오늘 날씨는 어때?': '오늘은 맑은 날씨입니다.',
-    };
+function evaluateExpression() {
+    const expression = userExpression.value;
+    problemContainer.textContent = expression;
 
-    function evaluateExpression() {
-        const expression = userExpression.value;
-        problemContainer.textContent = expression;
+    try {
+        const result = eval(expression);
+        resultContainer.textContent = `결과: ${result}`;
+    } catch (error) {
+        resultContainer.textContent = '유효하지 않은 수식입니다.';
+    }
+}
 
-        try {
-            const result = eval(expression);
-            if (result) {
-                resultContainer.textContent = '참 (True)';
-            } else {
-                resultContainer.textContent = '거짓 (False)';
-            }
-        } catch (error) {
-            resultContainer.textContent = '유효하지 않은 수식입니다.';
+function sendUserMessage() {
+    const message = userInput.value;
+    displayMessage('User', message);
+    userInput.value = '';
+
+    let answer = '아직 배우지 못하였습니다.';
+    for (const question in responses) {
+        if (message.includes(question)) {
+            answer = responses[question];
+            break;
         }
     }
+    displayMessage('AI', answer);
+}
 
-    function sendUserMessage() {
-        const message = userInput.value;
-        displayMessage('User', message);
-        userInput.value = '';
-
-        let answer = '아직 배우지 못하였습니다.';
-        for (const question in responses) {
-            if (message.includes(question)) {
-                answer = responses[question];
-                break;
-            }
-        }
-        displayMessage('AI', answer);
-    }
-
-    function displayMessage(sender, content) {
-        const messageElement = document.createElement('p');
-        messageElement.innerHTML = `<strong>${sender}: </strong>${content}`;
-        chatContainer.appendChild(messageElement);
-    }
-    </script>
+function displayMessage(sender, content) {
+    const messageElement = document.createElement('p');
+    messageElement.innerHTML = `<strong>${sender}: </strong>${content}`;
+    chatContainer.appendChild(messageElement);
+}
+</script>
 </body>
 </html>
