@@ -2,6 +2,24 @@
 <html>
 <head>
     <title>Math Problem Solver and AI Chat</title>
+    <style>
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .message strong {
+            font-weight: bold;
+        }
+
+        .message a {
+            color: #333;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Math Problem Solver and AI Chat</h1>
@@ -51,14 +69,14 @@
         }
 
         function searchAndDisplayResult(query) {
-            searchOnNaver(query);
-            const message = `네이버에서 "${query}"에 대한 검색 결과를 찾았습니다.`;
-            displayMessage('AI', message);
+            const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`;
+            const message = `<div class="message">ChatGPT: 네이버에서 "<a href="${searchUrl}" target="_blank">${query}</a>"에 대한 검색 결과를 찾았습니다.</div>`;
+            displayMessage(message);
         }
 
         function sendUserMessage() {
             const message = userInput.value;
-            displayMessage('User', message);
+            displayMessage(`<div class="message">User: ${message}</div>`);
             userInput.value = '';
 
             let answer = '아직 배우지 못하였습니다.';
@@ -73,12 +91,12 @@
                     break;
                 }
             }
-            displayMessage('AI', answer);
+            displayMessage(`<div class="message">ChatGPT: ${answer}</div>`);
         }
 
-        function displayMessage(sender, content) {
-            const messageElement = document.createElement('p');
-            messageElement.innerHTML = `<strong>${sender}: </strong>${content}`;
+        function displayMessage(content) {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = content;
             chatContainer.appendChild(messageElement);
         }
     </script>
