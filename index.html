@@ -2,6 +2,48 @@
 <html>
 <head>
     <title>AI Chat</title>
+    <style>
+    /* Chat container */
+    #chat-container {
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        padding: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Chat message */
+    #chat-container p {
+        margin: 0;
+        padding: 5px;
+    }
+
+    /* User message */
+    #chat-container p:nth-child(even) {
+        background-color: #d4e1f4;
+        border-radius: 4px;
+    }
+
+    /* AI message */
+    #chat-container p:nth-child(odd) {
+        background-color: #fff;
+        border-radius: 4px;
+    }
+
+    /* Input section */
+    #user-input, #user-expression {
+        width: 70%;
+        padding: 8px;
+        font-size: 16px;
+    }
+
+    /* Button */
+    button {
+        padding: 8px 16px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
 </head>
 <body>
     <h1>AI Chat</h1>
@@ -45,9 +87,8 @@
             '권찬': 'ㅂㅅ',
             'ㄴㄱㅁ': 'ㄴㄱㅁ는 니엄마라는 뜻입니다.',
             'ㄴㅇㅃ': 'ㄴㅇㅃ는 니 아빠라는 뜻입니다.',
-            '너 취미': '로봇인데 있겠냐?',
-            '/ 확률':'99'
-           };
+            '너 취미': '로봇인데 있겠냐?'
+        };
 
         function evaluateExpression() {
             const expression = userExpression.value;
@@ -61,29 +102,25 @@
             }
         }
 
-function sendUserMessage() {
-    const message = userInput.value;
-    displayMessage('User', message);
-    userInput.value = '';
+        function sendUserMessage() {
+            const message = userInput.value;
+            displayMessage('User', message);
+            userInput.value = '';
 
-    let answer = '아직 완전판아니라 그런거 몰?루';
-    const probabilityCommand = '/확률';
-    if (message.startsWith(probabilityCommand)) {
-        const number = parseInt(message.substring(probabilityCommand.length));
-        if (!isNaN(number)) {
-            const randomNum = Math.min(number, 99);
-            answer = `확률: ${randomNum}`;
-        }
-    } else {
-        for (const question in responses) {
-            if (message.includes(question)) {
-                answer = responses[question];
-                break;
+            let answer = '아직 완전판아니라 그런거 몰?루';
+            if (message === '/확률') {
+                const randomNum = Math.floor(Math.random() * 99) + 1;
+                answer = `확률: ${randomNum}`;
+            } else {
+                for (const question in responses) {
+                    if (message.includes(question)) {
+                        answer = responses[question];
+                        break;
+                    }
+                }
             }
+            displayMessage('AI', answer);
         }
-    }
-    displayMessage('AI', answer);
-}
 
         function displayMessage(sender, content) {
             const messageElement = document.createElement('p');
