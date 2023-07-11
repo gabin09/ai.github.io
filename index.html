@@ -48,7 +48,7 @@
         const responses = {
             '안녕': '안녕하세요!',
             '반가워': '반가워요!',
-            '오늘 날씨는 어때?': '오늘은 맑은 날씨입니다.',
+            '오늘 날씨는 어때?': '오늘은 나도 ㅁ?ㄹ',
         };
 
         function evaluateExpression() {
@@ -79,7 +79,7 @@
             displayMessage(`<div class="message">User: ${message}</div>`);
             userInput.value = '';
 
-            let answer = '아직 배우지 못하였습니다.';
+            let answer = '아직 완전판이 아니라 그런거 ㅁ?ㄹ.';
             if (message.startsWith('/검색 ')) {
                 const query = message.replace('/검색 ', '');
                 searchAndDisplayResult(query);
