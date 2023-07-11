@@ -1,52 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Chat</title>
-    <style>
-        /* Chat container */
-        #chat-container {
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            padding: 10px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        /* Chat message */
-        #chat-container p {
-            margin: 0;
-            padding: 5px;
-        }
-
-        /* User message */
-        #chat-container p:nth-child(even) {
-            background-color: #d4e1f4;
-            border-radius: 4px;
-        }
-
-        /* AI message */
-        #chat-container p:nth-child(odd) {
-            background-color: #fff;
-            border-radius: 4px;
-        }
-
-        /* Input section */
-        #user-input {
-            width: 70%;
-            padding: 8px;
-            font-size: 16px;
-        }
-
-        /* Button */
-        button {
-            padding: 8px 16px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-    </style>
+    <title>Math Problem Solver and AI Chat</title>
 </head>
 <body>
-    <h1>AI Chat</h1>
+    <h1>Math Problem Solver and AI Chat</h1>
     <h2>Math Problem Solver</h2>
     <div id="problem-container"></div>
     <input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
@@ -70,27 +28,9 @@
         const userInput = document.getElementById('user-input');
 
         const responses = {
-            '안녕': 'ㅎㅇ',
-            '반가워': 'ㅎㅇㅎㅇ',
-            '오늘 날씨는 어때?': '손가락없냐 검색좀해라',
-            '니엄마': '뭐',
-            '넌 누구니?': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
-            'ㄴㄱ?': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
-            '누구니?': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
-            '넌 누구': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
-            '자소': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
-            '자기소개': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
-            '너 엄마 없지': '자기소개 감사합니다.',
-            '니아빠': '뭐',
-            '너 아빠 없지': '자기소개 감사합니다.',
-            '자기소개 아닌데': '거짓말 하실 필요 없습니다.',
-            '권찬': 'ㅂㅅ',
-            'ㄴㄱㅁ': 'ㄴㄱㅁ는 니엄마라는 뜻입니다.',
-            'ㄴㅇㅃ': 'ㄴㅇㅃ는 니 아빠라는 뜻입니다.',
-            '김가빈': '위대하신 나의 주인이며 매우 똑똑한 사람이십니다.',
-            '찬': 'ㅂㅅ',
-            '가빈': '위대하신 나의 주인이며 매우 똑똑한 사람이십니다.',
-            '너 취미': '로봇인데 있겠냐?'
+            '안녕': '안녕하세요!',
+            '반가워': '반가워요!',
+            '오늘 날씨는 어때?': '오늘은 맑은 날씨입니다.',
         };
 
         function evaluateExpression() {
@@ -105,23 +45,32 @@
             }
         }
 
+        function searchOnNaver(query) {
+            const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`;
+            window.open(searchUrl, '_blank');
+        }
+
+        function searchAndDisplayResult(query) {
+            searchOnNaver(query);
+            const message = `네이버에서 "${query}"에 대한 검색 결과를 찾았습니다.`;
+            displayMessage('AI', message);
+        }
+
         function sendUserMessage() {
             const message = userInput.value;
             displayMessage('User', message);
             userInput.value = '';
 
-            let answer = '아직 완전판아니라 그런거 몰?루';
-
-            // Check if the message is a math problem
-            if (!isNaN(message)) {
-                const result = eval(message);
-                answer = `수식 결과: ${result}`;
-            } else {
-                for (const question in responses) {
-                    if (message.includes(question)) {
-                        answer = responses[question];
-                        break;
-                    }
+            let answer = '아직 배우지 못하였습니다.';
+            if (message.startsWith('/검색 ')) {
+                const query = message.replace('/검색 ', '');
+                searchAndDisplayResult(query);
+                return;
+            }
+            for (const question in responses) {
+                if (message.includes(question)) {
+                    answer = responses[question];
+                    break;
                 }
             }
             displayMessage('AI', answer);
