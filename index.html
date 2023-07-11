@@ -61,25 +61,29 @@
             }
         }
 
-        function sendUserMessage() {
-            const message = userInput.value;
-            displayMessage('User', message);
-            userInput.value = '';
+function sendUserMessage() {
+    const message = userInput.value;
+    displayMessage('User', message);
+    userInput.value = '';
 
-            let answer = '아직 완전판아니라 그런거 몰?루';
-            if (message === '/확률') {
-                const randomNum = Math.floor(Math.random() * 99) + 1;
-                answer = `확률: ${randomNum}`;
-            } else {
-                for (const question in responses) {
-                    if (message.includes(question)) {
-                        answer = responses[question];
-                        break;
-                    }
-                }
-            }
-            displayMessage('AI', answer);
+    let answer = '아직 완전판아니라 그런거 몰?루';
+    const probabilityCommand = '/확률';
+    if (message.startsWith(probabilityCommand)) {
+        const number = parseInt(message.substring(probabilityCommand.length));
+        if (!isNaN(number)) {
+            const randomNum = Math.min(number, 99);
+            answer = `확률: ${randomNum}`;
         }
+    } else {
+        for (const question in responses) {
+            if (message.includes(question)) {
+                answer = responses[question];
+                break;
+            }
+        }
+    }
+    displayMessage('AI', answer);
+}
 
         function displayMessage(sender, content) {
             const messageElement = document.createElement('p');
