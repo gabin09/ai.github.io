@@ -5,84 +5,86 @@
 </head>
 <body>
     <h1>AI Chat</h1>
-<h2>Math Problem Solver</h2>
-<div id="problem-container"></div>
-<input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
-<button onclick="evaluateExpression()">평가</button>
+    <h2>Math Problem Solver</h2>
+    <div id="problem-container"></div>
+    <input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
+    <button onclick="evaluateExpression()">평가</button>
 
-<div id="result-container"></div>
+    <div id="result-container"></div>
 
-<hr>
+    <hr>
 
-<h2>AI Chat</h2>
-<div id="chat-container"></div>
-<input type="text" id="user-input" placeholder="질문을 입력하세요..." />
-<button onclick="sendUserMessage()">전송</button>
+    <h2>AI Chat</h2>
+    <div id="chat-container"></div>
+    <input type="text" id="user-input" placeholder="질문을 입력하세요..." />
+    <button onclick="sendUserMessage()">전송</button>
 
-<script>
-const problemContainer = document.getElementById('problem-container');
-const userExpression = document.getElementById('user-expression');
-const resultContainer = document.getElementById('result-container');
+    <script>
+        const problemContainer = document.getElementById('problem-container');
+        const userExpression = document.getElementById('user-expression');
+        const resultContainer = document.getElementById('result-container');
 
-const chatContainer = document.getElementById('chat-container');
-const userInput = document.getElementById('user-input');
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
 
-const responses = {
-    '안녕': 'ㅎㅇ',
-    '반가워': 'ㅎㅇㅎㅇ',
-    '오늘 날씨는 어때?': '손가락없냐 검색좀해라',
-    '니엄마': '뭐',
-    '넌 누구니?': '전 위대하신 가빈님이 만드신 ai로봇입니다.',
-    'ㄴㄱ?': '전 위대하신 가빈님이 만드신 ai로봇입니다.',
-    '누구니?': '전 위대하신 가빈님이 만드신 ai로봇입니다.',
-    '넌 누구': '전 위대하신 가빈님이 만드신 ai로봇입니다.',
-    '자소': '전 위대하신 가빈님이 만드신 ai로봇입니다.',
-    '자기소개': '전 위대하신 가빈님이 만드신 ai로봇입니다.',
-    '너 엄마 없지': '자기소개 감사합니다.',
-    '니아빠': '뭐',
-    '너 아빠 없지': '자기소개 감사합니다.',
-    '자기소개 아닌데': '거짓말 하실 필요 없습니다.',
-    '권찬': 'ㅂㅅ',
-    'ㄴㄱㅁ': 'ㄴㄱㅁ는 니엄마라는 뜻입니다.',
-    'ㄴㅇㅃ': 'ㄴㅇㅃ는 니 아빠라는 뜻입니다.',
-    '너 취미': '로봇인데 있겠냐?',
-    ' 확률':'9',
-    '확률':'8',
-    '확 률':4
-};
+        const responses = {
+            '안녕': 'ㅎㅇ',
+            '반가워': 'ㅎㅇㅎㅇ',
+            '오늘 날씨는 어때?': '손가락없냐 검색좀해라',
+            '니엄마': '뭐',
+            '넌 누구니?': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
+            'ㄴㄱ?': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
+            '누구니?': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
+            '넌 누구': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
+            '자소': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
+            '자기소개': '전 위대하신 가빈님이 만드신 AI로봇입니다.',
+            '너 엄마 없지': '자기소개 감사합니다.',
+            '니아빠': '뭐',
+            '너 아빠 없지': '자기소개 감사합니다.',
+            '자기소개 아닌데': '거짓말 하실 필요 없습니다.',
+            '권찬': 'ㅂㅅ',
+            'ㄴㄱㅁ': 'ㄴㄱㅁ는 니엄마라는 뜻입니다.',
+            'ㄴㅇㅃ': 'ㄴㅇㅃ는 니 아빠라는 뜻입니다.',
+            '너 취미': '로봇인데 있겠냐?'
+        };
 
-function evaluateExpression() {
-    const expression = userExpression.value;
-    problemContainer.textContent = expression;
+        function evaluateExpression() {
+            const expression = userExpression.value;
+            problemContainer.textContent = expression;
 
-    try {
-        const result = eval(expression);
-        resultContainer.textContent = `결과: ${result}`;
-    } catch (error) {
-        resultContainer.textContent = '유효하지 않은 수식입니다.';
-    }
-}
-
-function sendUserMessage() {
-    const message = userInput.value;
-    displayMessage('User', message);
-    userInput.value = '';
-
-    let answer = '아직 완전판아니라 그런거 몰?루';
-    for (const question in responses) {
-        if (message.includes(question)) {
-            answer = responses[question];
-            break;
+            try {
+                const result = eval(expression);
+                resultContainer.textContent = `결과: ${result}`;
+            } catch (error) {
+                resultContainer.textContent = '유효하지 않은 수식입니다.';
+            }
         }
-    }
-    displayMessage('AI', answer);
-}
 
-function displayMessage(sender, content) {
-    const messageElement = document.createElement('p');
-    messageElement.innerHTML = `<strong>${sender}: </strong>${content}`;
-    chatContainer.appendChild(messageElement);
-}
-</script>
+        function sendUserMessage() {
+            const message = userInput.value;
+            displayMessage('User', message);
+            userInput.value = '';
+
+            let answer = '아직 완전판아니라 그런거 몰?루';
+            if (message === '/확률') {
+                const randomNum = Math.floor(Math.random() * 99) + 1;
+                answer = `확률: ${randomNum}`;
+            } else {
+                for (const question in responses) {
+                    if (message.includes(question)) {
+                        answer = responses[question];
+                        break;
+                    }
+                }
+            }
+            displayMessage('AI', answer);
+        }
+
+        function displayMessage(sender, content) {
+            const messageElement = document.createElement('p');
+            messageElement.innerHTML = `<strong>${sender}: </strong>${content}`;
+            chatContainer.appendChild(messageElement);
+        }
+    </script>
 </body>
 </html>
