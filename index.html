@@ -70,7 +70,7 @@
 
         function searchAndDisplayResult(query) {
             const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`;
-            const message = `<div class="message">ChatGPT: 네이버에서 "<a href="${searchUrl}" target="_blank">${query}</a>"에 대한 검색 결과를 찾았습니다.</div>`;
+            const message = `<div class="message">ChatGPT조밥: 네이버에서 "<a href="${searchUrl}" target="_blank">${query}</a>"에 대한 검색 결과를 찾았습니다.</div>`;
             displayMessage(message);
         }
 
@@ -91,7 +91,7 @@
                     break;
                 }
             }
-            displayMessage(`<div class="message">ChatGPT: ${answer}</div>`);
+            displayMessage(`<div class="message">ChatGPT조밥: ${answer}</div>`);
         }
 
         function displayMessage(content) {
