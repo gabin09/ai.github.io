@@ -48,43 +48,54 @@
             border: none;
             border-top: 1px solid #ddd;
         }
+
+        #chat-container {
+            width: 70%;
+            float: left;
+        }
+
+        #problem-container {
+            width: 30%;
+            float: right;
+        }
     </style>
 </head>
 <body>
     <h1>Math Problem Solver and AI Chat</h1>
-    <h2>Math Problem Solver</h2>
-    <div id="problem-container"></div>
-    <input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
-    <button onclick="evaluateExpression()">평가</button>
-
-    <div id="result-container"></div>
-
-    <hr>
-
-    <h2>AI Chat</h2>
-    <div id="chat-container"></div>
-    <input type="text" id="user-input" placeholder="질문을 입력하세요..." />
-    <button onclick="sendUserMessage()">전송</button>
+    <div id="chat-container">
+        <h2>AI Chat</h2>
+        <div id="chat-content"></div>
+        <input type="text" id="user-input" placeholder="질문을 입력하세요..." />
+        <button onclick="sendUserMessage()">전송</button>
+    </div>
+    <div id="problem-container">
+        <h2>Math Problem Solver</h2>
+        <div id="problem-content"></div>
+        <input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
+        <button onclick="evaluateExpression()">평가</button>
+        <div id="result-container"></div>
+    </div>
 
     <script>
-        const problemContainer = document.getElementById('problem-container');
+        const chatContent = document.getElementById('chat-content');
+        const userInput = document.getElementById('user-input');
+
+        const problemContent = document.getElementById('problem-content');
         const userExpression = document.getElementById('user-expression');
         const resultContainer = document.getElementById('result-container');
-
-        const chatContainer = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
 
         const responses = {
             '안녕': '안녕하세요!',
             '반가워': '반가워요!',
             '안녕하세요': '반가워요!',
             '안녕하세요~': '반가워요!',
-            '안녕하세요~!': '반가워요!'
+            '안녕하세요~!': '반가워요!',
+            '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
         };
 
         function evaluateExpression() {
             const expression = userExpression.value;
-            problemContainer.textContent = expression;
+            problemContent.textContent = expression;
 
             try {
                 const result = Function(`return ${expression}`)();
@@ -92,11 +103,6 @@
             } catch (error) {
                 resultContainer.textContent = '유효하지 않은 수식입니다.';
             }
-        }
-
-        function searchOnNaver(query) {
-            const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`;
-            window.open(searchUrl, '_blank');
         }
 
         function searchAndDisplayResult(query) {
@@ -128,7 +134,7 @@
         function displayMessage(content) {
             const messageElement = document.createElement('div');
             messageElement.innerHTML = content;
-            chatContainer.appendChild(messageElement);
+            chatContent.appendChild(messageElement);
         }
     </script>
 </body>
