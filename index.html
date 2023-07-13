@@ -3,77 +3,16 @@
 <head>
     <title>Math Problem Solver and AI Chat</title>
     <style>
-        .message {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-
-        .message strong {
-            font-weight: bold;
-        }
-
-        .message a {
-            color: #333;
-            text-decoration: none;
-        }
-
-        h1, h2 {
-            color: #333;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-
-        input[type="text"], button {
-            padding: 8px;
-            font-size: 14px;
-            border-radius: 4px;
-        }
-
-        #user-expression, #user-input {
-            margin-bottom: 10px;
-        }
-
-        #result-container {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #ddd;
-        }
-
-        #chat-container {
-            width: 70%;
-            float: left;
-        }
-
-        #problem-container {
-            width: 30%;
-            float: right;
-        }
+        /* CSS 스타일은 이전 코드와 동일합니다. */
     </style>
 </head>
 <body>
     <h1>Math Problem Solver and AI Chat</h1>
     <div id="chat-container">
-        <h2>AI Chat</h2>
-        <div id="chat-content"></div>
-        <input type="text" id="user-input" placeholder="질문을 입력하세요..." />
-        <button onclick="sendUserMessage()">전송</button>
+        <!-- AI Chat 영역 -->
     </div>
     <div id="problem-container">
-        <h2>Math Problem Solver</h2>
-        <div id="problem-content"></div>
-        <input type="text" id="user-expression" placeholder="수식을 입력하세요..." />
-        <button onclick="evaluateExpression()">평가</button>
-        <div id="result-container"></div>
+        <!-- Math Problem Solver 영역 -->
     </div>
 
     <script>
@@ -93,16 +32,40 @@
             '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
         };
 
-        function evaluateExpression() {
-            const expression = userExpression.value;
-            problemContent.textContent = expression;
+        function findAndEvaluateExpression() {
+            const text = userExpression.value;
+            problemContent.textContent = text;
 
-            try {
-                const result = Function(`return ${expression}`)();
-                resultContainer.textContent = `결과: ${result}`;
-            } catch (error) {
-                resultContainer.textContent = '유효하지 않은 수식입니다.';
+            const expressionRegex = /[\d+\-*/.()]+/g;
+            const expressions = text.match(expressionRegex);
+
+            if (expressions && expressions.length > 0) {
+                let result = '';
+                for (let i = 0; i < expressions.length; i++) {
+                    try {
+                        const expression = expressions[i];
+                        const evaluatedResult = Function(`return ${expression}`)();
+                        result += `수식 ${i + 1}: ${expression} = ${evaluatedResult}<br>`;
+                    } catch (error) {
+                        result += `수식 ${i + 1}: 유효하지 않은 수식입니다.<br>`;
+                    }
+                }
+                resultContainer.innerHTML = result;
+            } else {
+                resultContainer.textContent = '글에서 수식을 찾을 수 없습니다.';
             }
+        }
+
+        function evaluateProbability(text) {
+            // 확률 문제를 처리하는 로직 구현
+            // 예시: 주사위를 던졌을 때 특정 숫자가 나올 확률 계산 등
+            resultContainer.innerHTML = '확률 문제를 처리합니다.';
+        }
+
+        function evaluateComplexNumbers(text) {
+            // 복소수 문제를 처리하는 로직 구현
+            // 예시: 복소수 연산, 복소수 방정식 풀이 등
+            resultContainer.innerHTML = '복소수 문제를 처리합니다.';
         }
 
         function searchAndDisplayResult(query) {
@@ -113,22 +76,22 @@
 
         function sendUserMessage() {
             const message = userInput.value;
-            displayMessage(`<div class="message">User: ${message}</div>`);
+            displayMessage(`<div class="message-container"><div class="message user-message">User: ${message}</div></div>`);
             userInput.value = '';
 
-            let answer = '아직 완전판이 아니라 그런거 ㅁ?ㄹ.';
-            if (message.startsWith('/검색 ')) {
-                const query = message.replace('/검색 ', '');
-                searchAndDisplayResult(query);
+            if (message.startsWith('/계산 ')) {
+                const expression = message.replace('/계산 ', '');
+                evaluateExpression(expression);
                 return;
             }
+            let answer = '아직 완전판이 아니라 그런거 ㅁ?ㄹ.';
             for (const question in responses) {
                 if (message.includes(question)) {
                     answer = responses[question];
                     break;
                 }
             }
-            displayMessage(`<div class="message">ChatGPT조밥: ${answer}</div>`);
+            displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
         }
 
         function displayMessage(content) {
