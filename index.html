@@ -68,10 +68,10 @@
     </div>
 
     <script>
-        const chatContent = document.getElementById('chat-content');
+        const chatContent = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
 
-        const problemContent = document.getElementById('problem-content');
+        const problemContent = document.getElementById('problem-container');
         const userExpression = document.getElementById('user-expression');
         const resultContainer = document.getElementById('result-container');
 
@@ -128,11 +128,11 @@
                         const imaginary = parseFloat(parts[1]);
                         const modulus = Math.sqrt(real ** 2 + imaginary ** 2);
                         const argument = Math.atan2(imaginary, real) * (180 / Math.PI);
+                        const squaredReal = (real ** 2) - (imaginary ** 2);
+                        const squaredImaginary = 2 * real * imaginary;
                         result += `복소수 ${i + 1}: ${complexNumber}<br>`;
-                        result += `실수부: ${real}<br>`;
-                        result += `허수부: ${imaginary}<br>`;
-                        result += `절댓값: ${modulus}<br>`;
-                        result += `변위각: ${argument}<br><br>`;
+                        result += `실수부: ${squaredReal}<br>`;
+                        result += `허수부: ${squaredImaginary}<br><br>`;
                     } catch (error) {
                         result += `복소수 ${i + 1}: 유효하지 않은 복소수입니다.<br><br>`;
                     }
