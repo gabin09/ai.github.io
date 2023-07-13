@@ -3,7 +3,59 @@
 <head>
     <title>Math Problem Solver and AI Chat</title>
     <style>
-        /* CSS 스타일은 이전 코드와 동일합니다. */
+        .message-container {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .message-container .message {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+        }
+
+        .message-container .user-message {
+            margin-left: auto;
+            background-color: #d2eaf6;
+        }
+
+        h1, h2 {
+            color: #333;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        input[type="text"], button {
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        #user-expression, #user-input {
+            margin-bottom: 10px;
+        }
+
+        #result-container {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        #chat-container {
+            width: 70%;
+            margin-right: 20px;
+        }
+
+        #problem-container {
+            width: 30%;
+        }
     </style>
 </head>
 <body>
