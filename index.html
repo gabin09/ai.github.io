@@ -3,6 +3,12 @@
 <head>
     <title>AI Chat</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
         .message-container {
             display: flex;
             margin-bottom: 10px;
@@ -24,6 +30,7 @@
         h1, h2 {
             color: #333;
             font-family: Arial, sans-serif;
+            text-align: center;
         }
 
         input[type="text"], button {
@@ -32,30 +39,28 @@
             border-radius: 4px;
         }
 
-        #user-expression, #user-input {
-            margin-bottom: 10px;
-        }
-
-        #result-container {
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #ddd;
-        }
-
         #chat-container {
             width: 70%;
             margin-right: 20px;
+            margin-bottom: 20px; /* 채팅 입력 칸을 아래로 내립니다. */
         }
 
-        #problem-container {
-            width: 30%;
+        #user-input-container {
+            clear: both;
+            overflow: hidden;
         }
 
+        #user-input-container input {
+            width: 80%;
+            float: left;
+        }
+
+        #user-input-container button {
+            width: 18%;
+            float: right;
+        }
+
+        /* ChatGPT의 스타일 */
         .message-container {
             justify-content: flex-start;
         }
@@ -74,25 +79,21 @@
     </style>
 </head>
 <body>
-    <h1>Math Problem Solver and AI Chat</h1>
-    <div id="user-input-container">
-    <input type="text" id="user-input">
-    <button onclick="sendUserMessage()">전송</button>
-</div>
+    <h1>AI Chat</h1>
     <div id="chat-container">
-        <!-- AI Chat 영역 --!>
+        <!-- AI Chat 영역 -->
+        <div class="message-container">
+            <div class="message bot-message">AI chat: 안녕하세요! 무엇을 도와드릴까요?</div>
+        </div>
     </div>
-    <div id="problem-container">
-        <!-- Math Problem Solver 영역 -->
+    <div id="user-input-container">
+        <input type="text" id="user-input">
+        <button onclick="sendUserMessage()">전송</button>
     </div>
 
     <script>
         const chatContent = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
-
-        const problemContent = document.getElementById('problem-container');
-        const userExpression = document.getElementById('user-expression');
-        const resultContainer = document.getElementById('result-container');
 
         const responses = {
             '안녕': '안녕하세요!',
@@ -103,94 +104,82 @@
             '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
         };
 
-        function findAndEvaluateExpression() {
-            const text = userExpression.value;
-            problemContent.textContent = text;
+        async function searchOnNaver(query) {
+            const url = `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`;
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
 
-            const expressionRegex = /[\d+\-*/.()]+/g;
-            const expressions = text.match(expressionRegex);
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(text, 'text/html');
 
-            if (expressions && expressions.length > 0) {
-                let result = '';
-                for (let i = 0; i < expressions.length; i++) {
-                    try {
-                        const expression = expressions[i];
-                        const evaluatedResult = Function(`return ${expression}`)();
-                        result += `수식 ${i + 1}: ${expression} = ${evaluatedResult}<br>`;
-                    } catch (error) {
-                        result += `수식 ${i + 1}: 유효하지 않은 수식입니다.<br>`;
-                    }
+                const searchResult = htmlDoc.querySelector('.lst_total');
+                const firstResult = searchResult?.querySelector('.api_txt_lines');
+
+                if (firstResult) {
+                    return firstResult.innerText;
+                } else {
+                    return '검색 결과를 찾을 수 없습니다.';
                 }
-                resultContainer.innerHTML = result;
-            } else {
-                resultContainer.textContent = '글에서 수식을 찾을 수 없습니다.';
+            } catch (error) {
+                console.error(error);
+                return '검색 중 오류가 발생했습니다.';
+            }
+        }
+
+        function evaluateComplexNumbers(expression) {
+            try {
+                const evaluatedResult = Function(`return ${expression}`)();
+                return `${expression} = ${evaluatedResult}`;
+            } catch (error) {
+                return `유효하지 않은 수식입니다.`;
             }
         }
 
         function evaluateProbability(text) {
             // 확률 문제를 처리하는 로직 구현
             // 예시: 주사위를 던졌을 때 특정 숫자가 나올 확률 계산 등
-            resultContainer.innerHTML = '확률 문제를 처리합니다.';
+            return '확률 문제를 처리합니다.';
         }
 
-        function evaluateComplexNumbers(text) {
-            const complexNumberRegex = /(\d+|\d*\.\d+)\s*\+\s*(\d+|\d*\.\d+)i/g;
-            const complexNumbers = text.match(complexNumberRegex);
-
-            if (complexNumbers && complexNumbers.length > 0) {
-                let result = '';
-                for (let i = 0; i < complexNumbers.length; i++) {
-                    try {
-                        const complexNumber = complexNumbers[i];
-                        const parts = complexNumber.match(/(\d+|\d*\.\d+)/g);
-                        const real = parseFloat(parts[0]);
-                        const imaginary = parseFloat(parts[1]);
-                        const modulus = Math.sqrt(real ** 2 + imaginary ** 2);
-                        const argument = Math.atan2(imaginary, real) * (180 / Math.PI);
-                        const squaredReal = (real ** 2) - (imaginary ** 2);
-                        const squaredImaginary = 2 * real * imaginary;
-                        result += `복소수 ${i + 1}: ${complexNumber}<br>`;
-                        result += `실수부: ${squaredReal}<br>`;
-                        result += `허수부: ${squaredImaginary}<br><br>`;
-                    } catch (error) {
-                        result += `복소수 ${i + 1}: 유효하지 않은 복소수입니다.<br><br>`;
+        function evaluateExpression(message) {
+            const commandRegex = /^\/(\S+)\s+(.*)/;
+            const match = message.match(commandRegex);
+            if (match) {
+                const command = match[1];
+                const argument = match[2].trim();
+                if (command === '계산') {
+                    if (argument.startsWith('확률')) {
+                        return evaluateProbability(argument);
+                    } else if (argument.startsWith('복소수')) {
+                        return evaluateComplexNumbers(argument);
+                    } else {
+                        return '잘못된 계산 형식입니다. "/계산 확률(또는 복소수)"와 같이 입력해주세요.';
                     }
+                } else if (command === '검색') {
+                    return searchOnNaver(argument);
                 }
-                resultContainer.innerHTML = result;
-            } else {
-                resultContainer.textContent = '글에서 복소수를 찾을 수 없습니다.';
             }
+            return '잘못된 명령어입니다.';
         }
 
-        function searchAndDisplayResult(query) {
-            const searchUrl = `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`;
-            const message = `<div class="message">ChatGPT조밥: 네이버에서 "<a href="${searchUrl}" target="_blank">${query}</a>"에 대한 검색 결과를 찾았습니다.</div>`;
-            displayMessage(message);
-        }
+        async function sendUserMessage() {
+        const message = userInput.value;
+        displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
+        userInput.value = '';
 
-        function sendUserMessage() {
-            const message = userInput.value;
-            displayMessage(`<div class="message-container"><div class="message user-message">User: ${message}</div></div>`);
-            userInput.value = '';
+        let answer = await evaluateExpression(message);
 
-            if (message.startsWith('/계산 ')) {
-                const expression = message.replace('/계산 ', '');
-                evaluateExpression(expression);
-                return;
-            }
-            if (message.includes('복소수')) {
-                evaluateComplexNumbers(message);
-                return;
-            }
-            let answer = '아직 완전판이 아니라 그런거 ㅁ?ㄹ.';
+        if (!answer) {
             for (const question in responses) {
                 if (message.includes(question)) {
                     answer = responses[question];
                     break;
                 }
             }
-            displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
         }
+        displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
+    }
 
         function displayMessage(content) {
             const messageElement = document.createElement('div');
