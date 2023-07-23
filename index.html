@@ -103,7 +103,7 @@
         </div>
     </div>
     <div id="user-input-container">
-        <input type="text" id="user-input">
+        <input type="text" id="user-input" onkeydown="handleUserInput(event)">
         <button onclick="sendUserMessage()">전송</button>
     </div>
 
@@ -233,6 +233,11 @@
 
       reader.readAsArrayBuffer(file);
     }
+        function handleUserInput(event){
+            if(event.key === 'Enter'){
+                sendUserMessage();
+            }
+        }
     </script>
 </body>
 </html>
