@@ -164,22 +164,19 @@
         }
 
         async function sendUserMessage() {
-        const message = userInput.value;
-        displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
-        userInput.value = '';
+    const message = userInput.value;
+    displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
+    userInput.value = '';
 
-        let answer = await evaluateExpression(message);
+    let answer = responses[message]; // 사용자 입력과 일치하는 답변 찾기
 
-        if (!answer) {
-            for (const question in responses) {
-                if (message.includes(question)) {
-                    answer = responses[question];
-                    break;
-                }
-            }
-        }
-        displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
+    if (!answer) {
+        answer = '죄송합니다. 이해하지 못했습니다.'; // 일치하는 답변이 없을 경우 기본 메시지 출력
     }
+
+    displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
+}
+
 
         function displayMessage(content) {
             const messageElement = document.createElement('div');
