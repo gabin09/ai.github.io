@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Chat</title>
+    <title>AI Chat with Expense Tracker</title>
     <style>
-                body {
+        body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             color: #333;
@@ -27,13 +27,13 @@
             background-color: #d2eaf6;
         }
 
-        h1, h2 {
+        h1, h2, h3 {
             color: #333;
             font-family: Arial, sans-serif;
             text-align: center;
         }
 
-        input[type="text"], button {
+        input[type="text"], input[type="number"], button {
             padding: 8px;
             font-size: 14px;
             border-radius: 4px;
@@ -42,22 +42,12 @@
         #chat-container {
             width: 70%;
             margin-right: 20px;
-            margin-bottom: 20px; /* 채팅 입력 칸을 아래로 내립니다. */
+            margin-bottom: 20px;
         }
 
         #user-input-container {
             clear: both;
             overflow: hidden;
-        }
-
-        #user-input-container input {
-            width: 80%;
-            float: left;
-        }
-
-        #user-input-container button {
-            width: 18%;
-            float: right;
         }
 
         /* ChatGPT의 스타일 */
@@ -76,10 +66,36 @@
             margin-left: auto;
             background-color: #f9f9f9;
         }
+
+        /* 장부 정리 스타일 */
+        #expense-tracker {
+            width: 70%;
+        }
+
+        #expense-tracker input[type="number"],
+        #expense-tracker input[type="text"],
+        #expense-tracker button {
+            margin-top: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
-     <h1>AI Chat</h1>
+    <h1>AI Chat with Expense Tracker</h1>
     <div id="chat-container">
         <!-- AI Chat 영역 -->
         <div class="message-container">
@@ -91,105 +107,132 @@
         <button onclick="sendUserMessage()">전송</button>
     </div>
 
+    <div id="expense-tracker">
+        <h2>장부 정리</h2>
+        <p>금액과 내용을 입력하고 정리 버튼을 누르세요.</p>
+        <label for="amount">금액:</label>
+        <input type="number" id="amount">
+        <br>
+        <label for="content">내용:</label>
+        <input type="text" id="content">
+        <br>
+        <button onclick="addEntry()">정리</button>
+        <br>
+        <h3>정리된 장부</h3>
+        <table id="entryTable">
+            <tr>
+                <th>날짜</th>
+                <th>금액</th>
+                <th>내용</th>
+            </tr>
+        </table>
+
+        <input type="file" id="excelFileInput" accept=".xlsx" onchange="importExcel()">
+        <button onclick="downloadExcel()">엑셀로 다운로드</button>
+    </div>
+
     <script>
+          let entries = [];
 
-        const chatContent = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
+    function addEntry() {
+      const amountInput = document.getElementById("amount");
+      const contentInput = document.getElementById("content");
 
-        const responses = {
-            '안녕': '안녕하세요!',
-            '반가워': '반가워요!',
-            '안녕하세요': '반가워요!',
-            '안녕하세요~': '반가워요!',
-            '안녕하세요~!': '반가워요!',
-            '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
-        };
+      const amount = amountInput.value.trim();
+      const content = contentInput.value.trim();
 
+      if (!amount || !content) {
+        alert("금액과 내용을 모두 입력하세요.");
+        return;
+      }
 
+      const currentDate = new Date().toLocaleDateString();
 
-        const NAVER_API_CLIENT_ID = 'OZaKgCACShZTQ3e_lCKt'; // 네이버 API Client ID
-        const NAVER_API_CLIENT_SECRET = 'Zc5PX_e_ZS'; // 네이버 API Client Secret
+      const newEntry = {
+        date: currentDate,
+        amount: parseInt(amount),
+        content: content
+      };
 
-        async function searchOnNaver(query) {
-            const url = `https://openapi.naver.com/v1/search/webkr?query=${encodeURIComponent(query)}`;
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        'X-Naver-Client-Id': NAVER_API_CLIENT_ID,
-                        'X-Naver-Client-Secret': NAVER_API_CLIENT_SECRET
-                    }
-                });
-                const data = await response.json();
-                const searchResult = data?.items;
+      entries.push(newEntry);
 
-                if (searchResult && searchResult.length > 0) {
-                    return searchResult[0].title + ': ' + searchResult[0].link;
-                } else {
-                    return '검색 결과를 찾을 수 없습니다.';
-                }
-            } catch (error) {
-                console.error(error);
-                return '검색 중 오류가 발생했습니다.';
-            }
-        }
+      amountInput.value = "";
+      contentInput.value = "";
 
-             function evaluateComplexNumbers(expression) {
-            try {
-                const evaluatedResult = Function(`return ${expression}`)();
-                return `${expression} = ${evaluatedResult}`;
-            } catch (error) {
-                return `유효하지 않은 수식입니다.`;
-            }
-        }
-
-        function evaluateProbability(text) {
-            // 확률 문제를 처리하는 로직 구현
-            // 예시: 주사위를 던졌을 때 특정 숫자가 나올 확률 계산 등
-            return '확률 문제를 처리합니다.';
-        }
-
-        function evaluateExpression(message) {
-            const commandRegex = /^\/(\S+)\s+(.*)/;
-            const match = message.match(commandRegex);
-            if (match) {
-                const command = match[1];
-                const argument = match[2].trim();
-                if (command === '계산') {
-                    if (argument.startsWith('확률')) {
-                        return evaluateProbability(argument);
-                    } else if (argument.startsWith('복소수')) {
-                        return evaluateComplexNumbers(argument);
-                    } else {
-                        return '잘못된 계산 형식입니다. "/계산 확률(또는 복소수)"와 같이 입력해주세요.';
-                    }
-                } else if (command === '검색') {
-                    return searchOnNaver(argument);
-                }
-            }
-            return '잘못된 명령어입니다.';
-        }
-
-        async function sendUserMessage() {
-    const message = userInput.value;
-    displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
-    userInput.value = '';
-
-    let answer = responses[message]; // 사용자 입력과 일치하는 답변 찾기
-
-    if (!answer) {
-        answer = '죄송합니다. 이해하지 못했습니다.'; // 일치하는 답변이 없을 경우 기본 메시지 출력
+      displayEntries();
     }
 
-    displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
-}
+    function displayEntries() {
+      const table = document.getElementById("entryTable");
+      table.innerHTML = `
+        <tr>
+          <th>날짜</th>
+          <th>금액</th>
+          <th>내용</th>
+        </tr>
+      `;
 
+      entries.forEach((entry) => {
+        const row = table.insertRow();
+        row.insertCell().innerText = entry.date;
+        row.insertCell().innerText = entry.amount;
+        row.insertCell().innerText = entry.content;
+      });
+    }
 
-        function displayMessage(content) {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = content;
-            chatContent.appendChild(messageElement);
-        }
+    function downloadExcel() {
+      const excelData = entries.map((entry) => [entry.date, entry.amount, entry.content]);
 
+      const worksheet = XLSX.utils.aoa_to_sheet([["날짜", "금액", "내용"], ...excelData]);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "장부_정리");
+
+      const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+      const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const downloadLink = document.createElement("a");
+      downloadLink.href = window.URL.createObjectURL(blob);
+      downloadLink.download = "장부_정리.xlsx";
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+
+      document.body.removeChild(downloadLink);
+    }
+
+    function importExcel() {
+      const fileInput = document.getElementById("excelFileInput");
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("파일을 선택해주세요.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const excelData = XLSX.utils.sheet_to_json(worksheet, { header: ["날짜", "금액", "내용"] });
+
+        // Clear the existing entries before importing new ones
+        entries = [];
+
+        excelData.forEach((entry) => {
+          const newEntry = {
+            date: entry["날짜"],
+            amount: parseInt(entry["금액"]),
+            content: entry["내용"]
+          };
+
+          entries.push(newEntry);
+        });
+
+        displayEntries();
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
     </script>
 </body>
 </html>
