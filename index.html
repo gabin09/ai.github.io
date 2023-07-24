@@ -3,7 +3,8 @@
 <head>
     <title>AI Chat with Expense Tracker</title>
     <style>
-        body {
+
+body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     color: #333;
@@ -100,6 +101,7 @@ th {
 .hidden {
     display: none;
 }
+
     </style>
 </head>
 <body>
@@ -142,22 +144,22 @@ th {
 
     <script>
         const chatContent = document.getElementById('chat-container');
-const userInput = document.getElementById('user-input');
+        const userInput = document.getElementById('user-input');
 
-const responses = {
-    '안녕': '안녕하세요!',
-    '반가워': '반가워요!',
-    '안녕하세요': '반가워요!',
-    '안녕하세요~': '반가워요!',
-    '안녕하세요~!': '반가워요!',
-    '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
-};
+        const responses = {
+            '안녕': '안녕하세요!',
+            '반가워': '반가워요!',
+            '안녕하세요': '반가워요!',
+            '안녕하세요~': '반가워요!',
+            '안녕하세요~!': '반가워요!',
+            '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
+        };
 
-const NAVER_API_CLIENT_ID = 'OZaKgCACShZTQ3e_lCKt'; // 네이버 API Client ID
-const NAVER_API_CLIENT_SECRET = 'Zc5PX_e_ZS'; // 네이버 API Client Secret
+        const NAVER_API_CLIENT_ID = 'OZaKgCACShZTQ3e_lCKt'; // 네이버 API Client ID
+        const NAVER_API_CLIENT_SECRET = 'Zc5PX_e_ZS'; // 네이버 API Client Secret
 
-async function searchOnNaver(query) {
-                const url = `https://openapi.naver.com/v1/search/webkr?query=${encodeURIComponent(query)}`;
+        async function searchOnNaver(query) {
+            const url = `https://openapi.naver.com/v1/search/webkr?query=${encodeURIComponent(query)}`;
             try {
                 const response = await fetch(url, {
                     headers: {
@@ -179,23 +181,22 @@ async function searchOnNaver(query) {
             }
         }
 
-function evaluateComplexNumbers(expression) {
-    try {
+        function evaluateComplexNumbers(expression) {
+            try {
                 const evaluatedResult = Function(`return ${expression}`)();
                 return `${expression} = ${evaluatedResult}`;
             } catch (error) {
                 return `유효하지 않은 수식입니다.`;
             }
-}
+        }
 
-function evaluateProbability(text) {
-   // 확률 문제를 처리하는 로직 구현
-            // 예시: 주사위를 던졌을 때 특정 숫자가 나올 확률 계산 등
+        function evaluateProbability(text) {
+            // 확률 문제를 처리하는 로직을 여기에 구현하세요.
             return '확률 문제를 처리합니다.';
-}
+        }
 
-function evaluateExpression(message) {
-         const commandRegex = /^\/(\S+)\s+(.*)/;
+        function evaluateExpression(message) {
+            const commandRegex = /^\/(\S+)\s+(.*)/;
             const match = message.match(commandRegex);
             if (match) {
                 const command = match[1];
@@ -213,30 +214,29 @@ function evaluateExpression(message) {
                 }
             }
             return '잘못된 명령어입니다.';
+        }
 
-}
+        async function sendUserMessage() {
+            const message = userInput.value;
+            displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
+            userInput.value = '';
 
-async function sendUserMessage() {
-     const message = userInput.value;
-    displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
-    userInput.value = '';
+            let answer = responses[message]; // 사용자 입력과 일치하는 답변 찾기
 
-    let answer = responses[message]; // 사용자 입력과 일치하는 답변 찾기
+            if (!answer) {
+                answer = evaluateExpression(message); // 일치하는 답변이 없을 경우 명령어 평가
+            }
 
-    if (!answer) {
-        answer = '죄송합니다. 이해하지 못했습니다.'; // 일치하는 답변이 없을 경우 기본 메시지 출력
-    }
+            displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
+        }
 
-    displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
-}
-
-function displayMessage(content) {
-     const messageElement = document.createElement('div');
+        function displayMessage(content) {
+            const messageElement = document.createElement('div');
             messageElement.innerHTML = content;
             chatContent.appendChild(messageElement);
-}
+        }
 
-function handleUserInput(event) {
+        function handleUserInput(event) {
             if (event.key === 'Enter') {
                 const message = userInput.value;
                 if (message.trim().toLowerCase() === '/장부정리') {
@@ -249,6 +249,73 @@ function handleUserInput(event) {
             }
         }
 
+        function addEntry() {
+  const amountInput = document.getElementById('amount');
+  const  = document.getElementById('content');
+  const entryTable = document.getElementById('entryTable');
+
+  const amount = amountInput.value;
+  const content = contentInput.value;
+
+  if (amount && content) {
+    const date = new Date().toLocaleDateString(); // 현재 날짜를 가져옵니다.
+
+    const newRow = entryTable.insertRow(-1);
+    const dateCell = newRow.insertCell(0);
+    const amountCell = newRow.insertCell(1);
+    const contentCell = newRow.insertCell(2);
+
+    dateCell.innerHTML = date;
+    amountCell.innerHTML = amount;
+    contentCell.innerHTML = content;
+
+    amountInput.value = '';
+    contentInput.value = '';
+  }
+}
+
+function importExcel() {
+  const excelFileInput = document.getElementById('excelFileInput');
+  const file = excelFileInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const data = e.target.result;
+      // 엑셀 파일에서 데이터를 읽어와서 처리하는 로직을 구현하세요.
+      // 예를 들어, data 변수에 엑셀 파일 데이터가 들어있습니다.
+    };
+
+    reader.readAsBinaryString(file);
+  }
+}
+
+function downloadExcel() {
+  const entryTable = document.getElementById('entryTable');
+  const rows = entryTable.getElementsByTagName('tr');
+
+  let data = 'data:text/csv;charset=utf-8,';
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName('td');
+    let row = '';
+    for (let j = 0; j < cells.length; j++) {
+      row += cells[j].innerText + ',';
+    }
+    row = row.slice(0, -1); // 마지막 쉼표 제거
+    data += row + '\n';
+  }
+
+  const encodedURI = encodeURI(data);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedURI);
+  link.setAttribute('download', 'expense_tracker.csv');
+  document.body.appendChild(link);
+
+  link.click();
+}
+
     </script>
 </body>
 </html>
+
