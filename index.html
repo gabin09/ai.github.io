@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AI Chat with Expense Tracker</title>
-    <style>
-
-body {
+    <title>AI chat</title>
+  body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     color: #333;
@@ -101,11 +99,10 @@ th {
 .hidden {
     display: none;
 }
-
-    </style>
 </head>
 <body>
-    <h1>AI Chat with Expense Tracker</h1>
+
+<h1>AI Chat with Expense Tracker</h1>
     <div id="chat-container">
         <!-- AI Chat 영역 -->
         <div class="message-container">
@@ -141,8 +138,8 @@ th {
         <input type="file" id="excelFileInput" accept=".xlsx" onchange="importExcel()">
         <button onclick="downloadExcel()">엑셀로 다운로드</button>
     </div>
-
     <script>
+
         const chatContent = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
 
@@ -216,7 +213,21 @@ th {
             return '잘못된 명령어입니다.';
         }
 
-        async function sendUserMessage() {
+        // 사용자 입력 처리를 위한 이벤트 핸들링 수정
+        userInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                handleUserInput();
+            }
+        });
+
+        // "전송" 버튼 클릭을 위한 이벤트 핸들링 추가
+        const sendButton = document.querySelector('button');
+        sendButton.addEventListener('click', function() {
+            handleUserInput();
+        });
+
+        // 사용자 메시지 전송 함수 수정
+        function sendUserMessage() {
             const message = userInput.value;
             displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
             userInput.value = '';
@@ -230,26 +241,18 @@ th {
             displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
         }
 
-        function displayMessage(content) {
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = content;
-            chatContent.appendChild(messageElement);
-        }
-
-        function handleUserInput(event) {
-            if (event.key === 'Enter') {
-                const message = userInput.value;
-                if (message.trim().toLowerCase() === '/장부정리') {
-                    // '/장부정리'를 입력하면 장부 정리 영역을 보여주고 채팅 영역을 숨깁니다.
-                    expenseTracker.style.display = 'block';
-                    chatContainer.style.display = 'none';
-                } else {
-                    sendUserMessage();
-                }
+        function handleUserInput() {
+            const message = userInput.value;
+            if (message.trim().toLowerCase() === '/장부정리') {
+                // '/장부정리'를 입력하면 지출 내역 관리 영역을 표시하고 채팅 영역을 숨깁니다.
+                expenseTracker.style.display = 'block';
+                chatContainer.style.display = 'none';
+            } else {
+                sendUserMessage();
             }
         }
 
-        function addEntry() {
+function addEntry() {
   const amountInput = document.getElementById('amount');
   const  = document.getElementById('content');
   const entryTable = document.getElementById('entryTable');
@@ -314,8 +317,6 @@ function downloadExcel() {
 
   link.click();
 }
-
-    </script>
+   </script>
 </body>
 </html>
-
