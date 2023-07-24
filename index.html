@@ -1,113 +1,111 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html>
 <head>
     <title>AI Chat with Expense Tracker</title>
     <style>
-    
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-        }
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+}
 
-        .message-container {
-            display: flex;
-            margin-bottom: 10px;
-        }
+.message-container {
+    display: flex;
+    margin-bottom: 10px;
+}
 
-        .message-container .message {
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: Arial, sans-serif;
-        }
+.message-container .message {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+}
 
-        .message-container .user-message {
-            margin-left: auto;
-            background-color: #d2eaf6;
-        }
+.message-container .user-message {
+    margin-left: auto;
+    background-color: #d2eaf6;
+}
 
-        h1, h2, h3 {
-            color: #333;
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
+h1, h2, h3 {
+    color: #333;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
 
-        input[type="text"], input[type="number"], button {
-            padding: 8px;
-            font-size: 14px;
-            border-radius: 4px;
-        }
+input[type="text"], input[type="number"], button {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+}
 
-        #chat-container {
-            width: 70%;
-            margin-right: 20px;
-            margin-bottom: 20px;
-        }
+#chat-container {
+    width: 70%;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
 
-        #user-input-container {
-            clear: both;
-            overflow: hidden;
-        }
+#user-input-container {
+    clear: both;
+    overflow: hidden;
+}
 
-        /* ChatGPT의 스타일 */
-        .message-container {
-            justify-content: flex-start;
-        }
+/* ChatGPT의 스타일 */
+.message-container {
+    justify-content: flex-start;
+}
 
-        .message-container .message {
-            margin-right: auto;
-            margin-left: 10px;
-            background-color: #d2eaf6;
-        }
+.message-container .message {
+    margin-right: auto;
+    margin-left: 10px;
+    background-color: #d2eaf6;
+}
 
-        .message-container .user-message {
-            margin-right: 10px;
-            margin-left: auto;
-            background-color: #f9f9f9;
-        }
+.message-container .user-message {
+    margin-right: 10px;
+    margin-left: auto;
+    background-color: #f9f9f9;
+}
 
-        /* 장부 정리 스타일 */
-        #expense-tracker {
-            width: 70%;
-        }
+/* 장부 정리 스타일 */
+#expense-tracker {
+    width: 70%;
+}
 
-        #expense-tracker input[type="number"],
-        #expense-tracker input[type="text"],
-        #expense-tracker button {
-            margin-top: 5px;
-        }
+#expense-tracker input[type="number"],
+#expense-tracker input[type="text"],
+#expense-tracker button {
+    margin-top: 5px;
+}
 
-        table {
-            border-collapse: collapse;
-            width: 50%;
-        }
+table {
+    border-collapse: collapse;
+    width: 50%;
+}
 
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: center;
+}
 
-        th {
-            background-color: #f2f2f2;
-        }
+th {
+    background-color: #f2f2f2;
+}
 
-        #expense-tracker {
-            display: none; /* 장부 정리 영역을 처음에는 숨깁니다. */
-        }
+#expense-tracker {
+    display: none; /* 장부 정리 영역을 처음에는 숨깁니다. */
+}
 
-        .hidden {
-            display: none;
-        }
-
+.hidden {
+    display: none;
+}
     </style>
 </head>
 <body>
     <h1>AI Chat with Expense Tracker</h1>
     <div id="chat-container">
-         <!-- AI Chat 영역 -->
+        <!-- AI Chat 영역 -->
         <div class="message-container">
             <div class="message bot-message">AI chat: 안녕하세요! 무엇을 도와드릴까요?</div>
         </div>
@@ -118,7 +116,7 @@
     </div>
 
     <div id="expense-tracker">
-  
+        <!-- 장부 정리 영역 -->
         <h2>장부 정리</h2>
         <p>금액과 내용을 입력하고 정리 버튼을 누르세요.</p>
         <label for="amount">금액:</label>
@@ -143,26 +141,23 @@
     </div>
 
     <script>
-
         const chatContent = document.getElementById('chat-container');
-        const userInput = document.getElementById('user-input');
+const userInput = document.getElementById('user-input');
 
-        const responses = {
-            '안녕': '안녕하세요!',
-            '반가워': '반가워요!',
-            '안녕하세요': '반가워요!',
-            '안녕하세요~': '반가워요!',
-            '안녕하세요~!': '반가워요!',
-            '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
-        };
+const responses = {
+    '안녕': '안녕하세요!',
+    '반가워': '반가워요!',
+    '안녕하세요': '반가워요!',
+    '안녕하세요~': '반가워요!',
+    '안녕하세요~!': '반가워요!',
+    '너희 아버지는 잘계시니?': '저의 아버지는 박사헌입니다. 죽었습니다.'
+};
 
+const NAVER_API_CLIENT_ID = 'OZaKgCACShZTQ3e_lCKt'; // 네이버 API Client ID
+const NAVER_API_CLIENT_SECRET = 'Zc5PX_e_ZS'; // 네이버 API Client Secret
 
-
-        const NAVER_API_CLIENT_ID = 'YOUR_NAVER_API_CLIENT_ID'; // 네이버 API Client ID
-        const NAVER_API_CLIENT_SECRET = 'YOUR_NAVER_API_CLIENT_SECRET'; // 네이버 API Client Secret
-
-        async function searchOnNaver(query) {
-            const url = `https://openapi.naver.com/v1/search/webkr?query=${encodeURIComponent(query)}`;
+async function searchOnNaver(query) {
+                const url = `https://openapi.naver.com/v1/search/webkr?query=${encodeURIComponent(query)}`;
             try {
                 const response = await fetch(url, {
                     headers: {
@@ -184,23 +179,23 @@
             }
         }
 
-             function evaluateComplexNumbers(expression) {
-            try {
+function evaluateComplexNumbers(expression) {
+    try {
                 const evaluatedResult = Function(`return ${expression}`)();
                 return `${expression} = ${evaluatedResult}`;
             } catch (error) {
                 return `유효하지 않은 수식입니다.`;
             }
-        }
+}
 
-        function evaluateProbability(text) {
-            // 확률 문제를 처리하는 로직 구현
+function evaluateProbability(text) {
+   // 확률 문제를 처리하는 로직 구현
             // 예시: 주사위를 던졌을 때 특정 숫자가 나올 확률 계산 등
             return '확률 문제를 처리합니다.';
-        }
+}
 
-        function evaluateExpression(message) {
-            const commandRegex = /^\/(\S+)\s+(.*)/;
+function evaluateExpression(message) {
+         const commandRegex = /^\/(\S+)\s+(.*)/;
             const match = message.match(commandRegex);
             if (match) {
                 const command = match[1];
@@ -218,10 +213,11 @@
                 }
             }
             return '잘못된 명령어입니다.';
-        }
 
-        async function sendUserMessage() {
-    const message = userInput.value;
+}
+
+async function sendUserMessage() {
+     const message = userInput.value;
     displayMessage(`<div class="message-container"><div class="message user-message">사용자: ${message}</div></div>`);
     userInput.value = '';
 
@@ -234,17 +230,13 @@
     displayMessage(`<div class="message-container"><div class="message">ChatGPT조밥: ${answer}</div></div>`);
 }
 
-
-        function displayMessage(content) {
-            const messageElement = document.createElement('div');
+function displayMessage(content) {
+     const messageElement = document.createElement('div');
             messageElement.innerHTML = content;
             chatContent.appendChild(messageElement);
-        }
+}
 
-        const expenseTracker = document.getElementById('expense-tracker');
-        const userInput = document.getElementById('user-input');
-
-        function handleUserInput(event) {
+function handleUserInput(event) {
             if (event.key === 'Enter') {
                 const message = userInput.value;
                 if (message.trim().toLowerCase() === '/장부정리') {
@@ -257,11 +249,6 @@
             }
         }
 
-        function sendUserMessage() {
-            if(event.key === 'Enter'){
-                sendUserMessage();
-            }
-        }
     </script>
 </body>
 </html>
