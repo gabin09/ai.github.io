@@ -9,6 +9,8 @@
         font-family: Arial, sans-serif;
         background-color: #f0f0f0;
         text-align: center;
+        margin: 0;
+        padding: 0;
     }
     h1 {
         color: #333;
@@ -29,6 +31,7 @@
     table {
         margin: 0 auto;
         border-collapse: collapse;
+        width: 90%; /* 너비 조정 */
     }
     th, td {
         border: 1px solid #ddd;
@@ -44,7 +47,7 @@
 <table id="lottoHistory">
     <thead>
         <tr>
-            <th>추첨 번호 기록</th>
+            <th>추첨 번호</th>
         </tr>
     </thead>
     <tbody>
@@ -72,6 +75,12 @@ function generateLottoNumbers() {
     var cell = newRow.insertCell(0);
     cell.appendChild(document.createTextNode(lottoNumbersText));
 }
+
+document.addEventListener('touchstart', function(event) {
+    if (event.touches.length > 1) {
+        event.preventDefault();
+    }
+}, { passive: false });
 </script>
 </body>
 </html>
