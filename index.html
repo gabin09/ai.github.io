@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>로또 추첨기</title>
 <style>
     body {
@@ -47,7 +47,7 @@
 <table id="lottoHistory">
     <thead>
         <tr>
-            <th>추첨 번호</th>
+            <th>추첨 번호 기록</th>
         </tr>
     </thead>
     <tbody>
@@ -75,12 +75,6 @@ function generateLottoNumbers() {
     var cell = newRow.insertCell(0);
     cell.appendChild(document.createTextNode(lottoNumbersText));
 }
-
-document.addEventListener('touchstart', function(event) {
-    if (event.touches.length > 1) {
-        event.preventDefault();
-    }
-}, { passive: false });
 </script>
 </body>
 </html>
