@@ -12,12 +12,13 @@
         margin: 0;
         padding: 0;
     }
-h1 {
-    /* 무지개 색상 그라데이션을 적용합니다. */
-    background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
-    -webkit-background-clip: text; /* 텍스트에만 적용되도록 설정합니다. */
-    color: transparent; /* 원래 텍스트는 투명하게 설정합니다. */
-}
+
+    h1 {
+        /* 무지개 색상 그라데이션을 적용합니다. */
+        background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red);
+        -webkit-background-clip: text; /* 텍스트에만 적용되도록 설정합니다. */
+        color: transparent; /* 원래 텍스트는 투명하게 설정합니다. */
+    }
 
     button {
         padding: 10px 20px;
@@ -30,14 +31,17 @@ h1 {
         margin-bottom: 10px; /* 20px 에서 10px 로 변경 */
         margin-bottom: 10px; /* 새로운 속성: 버튼을 위로 이동시킵니다. */
     }
+
     button:hover {
         background-color: #45a049;
     }
+
     table {
         margin: 0 auto;
         border-collapse: collapse;
         width: 90%; /* 너비 조정 */
     }
+
     th, td {
         border: 1px solid #ddd;
         padding: 8px;
@@ -59,6 +63,9 @@ h1 {
     </tbody>
 </table>
 
+<!-- 네이버 로또 번호 검색 버튼 -->
+<button onclick="searchLottoNumbersOnNaver()">네이버에서 로또 번호 검색</button>
+
 <script>
 function generateLottoNumbers() {
     var lottoNumbers = [];
@@ -79,6 +86,14 @@ function generateLottoNumbers() {
     var newRow = table.insertRow(table.rows.length);
     var cell = newRow.insertCell(0);
     cell.appendChild(document.createTextNode(lottoNumbersText));
+}
+
+function searchLottoNumbersOnNaver() {
+    var lottoNumbers = document.getElementById("lottoNumbers").textContent;
+    var searchQuery = "로또 " + lottoNumbers;
+    var encodedQuery = encodeURIComponent(searchQuery);
+    var searchUrl = "https://search.naver.com/search.naver?query=" + encodedQuery;
+    window.open(searchUrl, "_blank");
 }
 </script>
 </body>
