@@ -66,6 +66,9 @@
 <!-- 네이버 로또 번호 검색 버튼 -->
 <button onclick="searchLottoNumbersOnNaver()">네이버에서 로또 번호 검색</button>
 
+<!-- 네이버 로또 번호 검색 결과 표시 -->
+<div id="searchResult"></div>
+
 <script>
 function generateLottoNumbers() {
     var lottoNumbers = [];
@@ -90,10 +93,16 @@ function generateLottoNumbers() {
 
 function searchLottoNumbersOnNaver() {
     var lottoNumbers = document.getElementById("lottoNumbers").textContent;
-    var searchQuery = "로또번호" + lottoNumbers;
+    var searchQuery = "로또번호 " + lottoNumbers;
     var encodedQuery = encodeURIComponent(searchQuery);
     var searchUrl = "https://search.naver.com/search.naver?query=" + encodedQuery;
+    
+    // 네이버에서 검색 결과를 새 창으로 열기
     window.open(searchUrl, "_blank");
+
+    // 검색 결과를 화면에 표시하기
+    var searchResultContainer = document.getElementById("searchResult");
+    searchResultContainer.textContent = "네이버에서 로또 번호 검색 결과: " + searchQuery;
 }
 </script>
 </body>
