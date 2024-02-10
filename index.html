@@ -90,7 +90,7 @@ function generateLottoNumbers() {
 
 function searchLottoNumbersOnNaver() {
     var lottoNumbers = document.getElementById("lottoNumbers").textContent;
-    var searchQuery = "로또 " + lottoNumbers;
+    var searchQuery = "로또번호" + lottoNumbers;
     var encodedQuery = encodeURIComponent(searchQuery);
     var searchUrl = "https://search.naver.com/search.naver?query=" + encodedQuery;
     window.open(searchUrl, "_blank");
